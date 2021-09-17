@@ -1,23 +1,14 @@
 package co.com.sofka.crud.entities;
 
-import org.springframework.scheduling.config.Task;
-
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
-@Entity
-@Table(name="task_group")
-public class TaskGroup implements Serializable
+public class TaskGroupDTO
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "listGroup",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<ToDo>tasks;
+    private List<ToDo> tasks;
 
-    public TaskGroup(){}
+    public TaskGroupDTO(){}
 
     public Long getId() {
         return id;
@@ -41,9 +32,5 @@ public class TaskGroup implements Serializable
 
     public void setTasks(List<ToDo> tasks) {
         this.tasks = tasks;
-    }
-
-    public void addTask(ToDo toDo){
-        this.tasks.add(toDo);
     }
 }

@@ -1,20 +1,16 @@
 package co.com.sofka.crud.entities;
 
-import javax.persistence.*;
+
 import java.io.Serializable;
 
-@Entity
-@Table(name="to_do")
-public class ToDo implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ItemDTO {
+
     private Long id;
     private String name;
     private boolean isCompleted;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private TaskGroup listGroup;
 
-    public ToDo(){}
+    public ItemDTO(){}
 
     public Long getId() {
         return id;
@@ -36,7 +32,7 @@ public class ToDo implements Serializable {
         return isCompleted;
     }
 
-    public void setCompleted(boolean isCompleted) {
+    public void setIsCompleted(boolean isCompleted) {
         this.isCompleted = isCompleted;
     }
 

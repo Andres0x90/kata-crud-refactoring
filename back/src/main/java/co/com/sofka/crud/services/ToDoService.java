@@ -1,30 +1,57 @@
 package co.com.sofka.crud.services;
 
+import co.com.sofka.crud.entities.ItemDTO;
 import co.com.sofka.crud.repositories.ToDoRepository;
 import co.com.sofka.crud.entities.ToDo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
-public class ToDoService {
+public class ToDoService implements InterfaceToDoService{
 
     @Autowired
     private ToDoRepository repository;
 
-    public Iterable<ToDo> list(){
-        return repository.findAll();
+    @Autowired
+    private ModelMapper mapper;
+
+    @Override
+    public Iterable<ItemDTO> list(){
+        List<ItemDTO> itemsDTO = new ArrayList<>();
+        repository.findAll().forEach((toDo) -> {itemsDTO.add(mapper.map(toDo, ItemDTO.class));});
+        return itemsDTO;
     }
 
-    public ToDo save(ToDo todo){
-        return repository.save(todo);
+    @Override
+    public ItemDTO save(ToDo toDo){
+        return mapper.map(repository.save(toDo), ItemDTO.class);
     }
 
+    @Override
+    public ItemDTO get(Long id){
+        ToDo toDo = repository.findById(id).orElseThrow();
+        return mapper.map(toDo, ItemDTO.class);
+    }
+
+    @Override
+    public ItemDTO update(ToDo toDo)
+    {
+        if(toDo.getId() == null)
+            throw new NoSuchElementException();
+
+        get(toDo.getId());
+        return mapper.map(repository.save(toDo), ItemDTO.class);
+    }
+
+    @Override
     public void delete(Long id){
-        repository.delete(get(id));
+        ItemDTO toDo = get(id);
+        repository.delete(mapper.map(toDo, ToDo.class));
     }
-
-    public ToDo get(Long id){
-         return repository.findById(id).orElseThrow();
-    }
-
 }

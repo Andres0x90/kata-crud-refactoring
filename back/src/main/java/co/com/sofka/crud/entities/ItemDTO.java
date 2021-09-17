@@ -1,8 +1,5 @@
 package co.com.sofka.crud.entities;
 
-
-import java.io.Serializable;
-
 public class ItemDTO {
 
     private Long id;

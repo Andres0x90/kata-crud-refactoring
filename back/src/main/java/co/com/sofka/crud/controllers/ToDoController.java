@@ -24,7 +24,7 @@ public class ToDoController {
     public ItemDTO save(@RequestBody ItemDTO itemDTO,@PathVariable Long listGroup)
     {
         ToDo toDo = mapper.map(itemDTO, ToDo.class);
-        return service.save(toDo);
+        return service.save(toDo, listGroup);
     }
 
     @GetMapping(value = "/list")
@@ -38,8 +38,9 @@ public class ToDoController {
     }
 
     @PutMapping(value = "/update")
-    public ItemDTO update(@RequestBody ToDo todo){
-        return service.update(todo);
+    public ItemDTO update(@RequestBody ItemDTO itemDTO){
+        ToDo toDo = mapper.map(itemDTO, ToDo.class);
+        return service.update(toDo);
     }
 
     @DeleteMapping(value = "/delete/{id}")

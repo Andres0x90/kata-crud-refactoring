@@ -5,7 +5,7 @@ import co.com.sofka.crud.entities.ToDo;
 
 public interface InterfaceToDoService {
     public Iterable<ItemDTO> list();
-    public ItemDTO save(ToDo toDo);
+    public ItemDTO save(ToDo toDo, Long listGroup);
     public ItemDTO update(ToDo toDo);
     public void delete(Long id);
     public ItemDTO get(Long id);

@@ -11,8 +11,6 @@ public class ToDo implements Serializable {
     private Long id;
     private String name;
     private boolean isCompleted;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private TaskGroup listGroup;
 
     public ToDo(){}
 
@@ -40,11 +38,4 @@ public class ToDo implements Serializable {
         this.isCompleted = isCompleted;
     }
 
-    public TaskGroup getListGroup() {
-        return listGroup;
-    }
-
-    public void setListGroup(TaskGroup listGroup) {
-        this.listGroup = listGroup;
-    }
 }

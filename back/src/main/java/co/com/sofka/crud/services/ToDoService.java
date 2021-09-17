@@ -1,13 +1,13 @@
 package co.com.sofka.crud.services;
 
 import co.com.sofka.crud.entities.ItemDTO;
+import co.com.sofka.crud.entities.TaskGroup;
 import co.com.sofka.crud.repositories.ToDoRepository;
 import co.com.sofka.crud.entities.ToDo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,7 +17,8 @@ public class ToDoService implements InterfaceToDoService{
 
     @Autowired
     private ToDoRepository repository;
-
+    @Autowired
+    private InterfaceTaskGroupService taskGroupService;
     @Autowired
     private ModelMapper mapper;
 
@@ -29,8 +30,12 @@ public class ToDoService implements InterfaceToDoService{
     }
 
     @Override
-    public ItemDTO save(ToDo toDo, Long listGroup){
-        return mapper.map(repository.save(toDo), ItemDTO.class);
+    public ItemDTO save(ToDo toDo, Long listGroupId){
+        TaskGroup taskGroup = mapper.map(taskGroupService.get(listGroupId), TaskGroup.class);
+        toDo = repository.save(toDo);
+        taskGroup.addTask(toDo);
+        taskGroupService.save(taskGroup);
+        return mapper.map(toDo, ItemDTO.class);
     }
 
     @Override

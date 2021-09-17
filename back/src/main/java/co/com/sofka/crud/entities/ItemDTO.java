@@ -1,11 +1,10 @@
 package co.com.sofka.crud.entities;
 
-public class ItemDTO {
+public class ItemDTO  {
 
     private Long id;
     private String name;
     private boolean isCompleted;
-    private TaskGroup listGroup;
 
     public ItemDTO(){}
 
@@ -33,11 +32,4 @@ public class ItemDTO {
         this.isCompleted = isCompleted;
     }
 
-    public TaskGroup getListGroup() {
-        return listGroup;
-    }
-
-    public void setListGroup(TaskGroup listGroup) {
-        this.listGroup = listGroup;
-    }
 }

@@ -1,16 +1,16 @@
 package co.com.sofka.crud.services;
 
-import co.com.sofka.crud.entities.ItemDTO;
 import co.com.sofka.crud.entities.TaskGroup;
 import co.com.sofka.crud.entities.TaskGroupDTO;
-import co.com.sofka.crud.entities.ToDo;
 import co.com.sofka.crud.repositories.TaskGroupRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TaskGroupService implements InterfaceTaskGroupService{
     @Autowired
     private TaskGroupRepository repository;

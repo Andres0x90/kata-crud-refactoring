@@ -83,9 +83,9 @@ const Form = () => {
     }
 
   
-    return <form onSubmit={handleSubmit(onAddGroup)}>
-      <input type="text" placeholder="Crear nueva seccion" {...register("name")} />
-      <button type="submit">Crear grupo</button>
+    return <form className="col-md-4" onSubmit={handleSubmit(onAddGroup)}>
+      <input className="form-control my-3" type="text" placeholder="Crear nueva seccion" {...register("name")} />
+      <button type="submit" className="btn btn-primary">Crear grupo</button>
 
       {/* <input
         type="text"

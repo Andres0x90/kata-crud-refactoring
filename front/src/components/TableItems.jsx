@@ -108,9 +108,9 @@ const TableItems = () => {
 
   return <div>
 
-    <form onSubmit={handleSubmit(addTaskToGroup)}>
-      <input {...register("nameItem")} type="text" placeholder="Nombre del To-Do" />
-      <select {...register("groupId")}>
+    <form className="col-md-5"  onSubmit={handleSubmit(addTaskToGroup)}>
+      <input className="form-control my-3 " {...register("nameItem")} type="text" placeholder="Nombre del To-Do" />
+      <select className="form-select" {...register("groupId")}>
         <option>Seleccione una categoria</option>
         {
           groups.map((group) => {
@@ -120,14 +120,14 @@ const TableItems = () => {
           })
         }
       </select>
-      <button type="submit">Crear tarea</button>
+      <button className="btn btn-success my-3" type="submit">Crear tarea</button>
     </form>
 
 
 
-    <form onSubmit={handleSubmit(onUpdate)}>
-        <input type="text" {...register("nameItemUpdate")}/>
-        <button type="submit">Actualizar</button>
+    <form className="col-4" onSubmit={handleSubmit(onUpdate)}>
+        <input className="form-control" type="text" {...register("nameItemUpdate")}/>
+        <button className="btn btn-warning my-3" type="submit">Actualizar</button>
     </form>
 
     {
@@ -136,8 +136,8 @@ const TableItems = () => {
           <div>
             <h3>{group.name}</h3>
             <form onChange={handleSubmit(mark)}>
-              <table>
-                <thead>
+              <table className="table">
+                <thead className="table-dark">
                   <tr>
                     <th>ID</th>
                     <th>Tarea</th>
@@ -169,13 +169,13 @@ const TableItems = () => {
                               }
                             })
                           }} defaultChecked={task.isCompleted} />Completado</td>
-                        <td><button type="submit" onClick={(event) =>
+                        <td><button className="btn btn-warning" type="submit" onClick={(event) =>
                           {
                             event.preventDefault();
                             setCurrentList({"nameItemUpdate": task.name, "idItemUpdate": task.id});
                             
                           }}>Editar</button></td>
-                        <td><button type="submit" onClick={(event)=>
+                        <td><button className="btn btn-danger" type="submit" onClick={(event)=>
                           {
                             event.preventDefault();
                             fetch(HOST_API + "/items/delete/" + task.id, {

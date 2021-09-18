@@ -23,38 +23,43 @@ function reducer(state, action) {
       todoUpItem.item = {};
       return { ...state, todo: todoUpItem }
     case 'delete-item':
-      const todoUpDelete = state.todo;
-      const listUpdate = todoUpDelete.list.filter((item) => {
-        return item.id !== action.id;
+      const todoUpDelete = state.todo.groupToDo.map((group)=>
+      {
+        const listUpdate = group.tasks.filter((item) => {
+          return item.id !== action.task.id;
+        });
+        group.tasks = listUpdate;
+        return group;
       });
-      todoUpDelete.list = listUpdate;
-      return { ...state, todo: todoUpDelete }
+      //todoUpDelete.list = listUpdate;
+      return { todo: {groupToDo: todoUpDelete} }
     case 'update-list':
       const listGroup = action.groupToDo;
       state.todo.groupToDo = action.groupToDo;
       return { todo: { groupToDo: listGroup } }
     case 'edit-item':
-      const todoEdit = state.todo.groupToDo.map(
+      const groupEdited = state.todo.groupToDo.map(
         (group) => {
+
           if (group.id == action.groupId) {
-            group.tasks = group.tasks.map(task =>
-              task.id == action.task.id ? action.task : task
+               const listUpdated = group.tasks.map(task =>
+                task.id === action.task.id ? action.task : task
             )
+            group.tasks = listUpdated;
           }
 
           return group;
         });
 
-      state.todo.groupToDo = todoEdit;
-      console.log(todoEdit);
-      return {...state, todo: { groupToDo: todoEdit } }
+      //state.todo.groupToDo = todoEdit;
+      return {todo: { groupToDo: groupEdited } }
     case 'add-item-group':
       const todoGroupUp = state.todo.groupToDo;
       todoGroupUp.push({ ...action.groupToDo, tasks: [] });
       state.todo.groupToDo = todoGroupUp;
       return { todo: { groupToDo: todoGroupUp } };
     case 'add-item':
-      const todoUp = state.todo.groupToDo.map(
+      const todoItemUp = state.todo.groupToDo.map(
         (group) => {
           if (group.id == action.groupId)
             group.tasks.push(action.item);
@@ -62,9 +67,9 @@ function reducer(state, action) {
           return group;
         });
 
-      state.todo.groupToDo = todoUp;
-      console.log(todoUp);
-      return { todo: { groupToDo: todoUp } }
+      state.todo.groupToDo = todoItemUp;
+      console.log(todoItemUp);
+      return { todo: { groupToDo: todoItemUp } }
     default:
       return state;
   }

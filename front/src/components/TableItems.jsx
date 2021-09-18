@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { Store } from "./StoreProvider";
 
 const TableItems = () => {
@@ -101,8 +101,8 @@ const TableItems = () => {
     }).then(response => response.json())
     .then((data) =>
     {
-      console.log(data);
-        dispatch({type: "edit-item", task: data, groupId: currentList.idItemUpdate});
+        dispatch({type: "edit-item", task: data, groupId: currentList.idGroupUpdate});
+        setCurrentList({...currentList, nameItemUpdate: data.name, idItemUpdate: data.id})
     })
   }
 
@@ -167,12 +167,17 @@ const TableItems = () => {
                               headers: {
                                 'Content-Type': 'application/json'
                               }
-                            })
-                          }} defaultChecked={task.isCompleted} />Completado</td>
+                            }).then(response => response.json())
+                            .then((data)=>
+                            {
+                              dispatch({type: "edit-item", task: data, groupId: group.id});
+                            });
+                          }} checked={task.isCompleted} />Completado</td>
                         <td><button className="btn btn-warning" type="submit" onClick={(event) =>
                           {
                             event.preventDefault();
-                            setCurrentList({"nameItemUpdate": task.name, "idItemUpdate": task.id});
+                            setCurrentList({"nameItemUpdate": task.name, "idItemUpdate": task.id
+                          , "idGroupUpdate": group.id});
                             
                           }}>Editar</button></td>
                         <td><button className="btn btn-danger" type="submit" onClick={(event)=>
@@ -184,6 +189,7 @@ const TableItems = () => {
                                 'Content-Type': 'application/json'
                               }
                             })
+                            dispatch({type:'delete-item', task: {id: task.id}});
                           }}>Eliminar</button></td>
                       </tr>
                     );

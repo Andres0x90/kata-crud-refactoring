@@ -64,7 +64,7 @@ const Form = () => {
     {
    
       const request = {
-        name: data.name,
+        name: data.nameGroup,
       };
   
       fetch(HOST_API + "/groups/save", {
@@ -77,26 +77,14 @@ const Form = () => {
         .then(response => response.json())
         .then((groupItem) => {
           dispatch({ type: "add-item-group", groupToDo: groupItem });
-          //setState({ name: "" });
 
         });       
     }
 
   
     return <form className="col-md-4" onSubmit={handleSubmit(onAddGroup)}>
-      <input className="form-control my-3" type="text" placeholder="Crear nueva seccion" {...register("name")} />
+      <input className="form-control my-3" type="text" placeholder="Crear nueva seccion" {...register("nameGroup")} />
       <button type="submit" className="btn btn-primary">Crear grupo</button>
-
-      {/* <input
-        type="text"
-        name="name"
-        placeholder="¿Qué piensas hacer hoy?"
-        defaultValue={item.name}
-        onChange={(event) => {
-          setState({ ...state, name: event.target.value })
-        }}  ></input>
-      {item.id && <button onClick={onEdit}>Actualizar</button>}
-      {!item.id && <button onClick={onAdd}>Crear</button>} */}
     </form>
 }
 

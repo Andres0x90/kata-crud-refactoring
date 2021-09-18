@@ -160,7 +160,16 @@ const TableItems = () => {
                             setCurrentList({"nameItemUpdate": task.name, "idItemUpdate": task.id});
                             
                           }}>Editar</button></td>
-                        <td><button type="submit">Eliminar</button></td>
+                        <td><button type="submit" onClick={(event)=>
+                          {
+                            event.preventDefault();
+                            fetch(HOST_API + "/items/delete/" + task.id, {
+                              method: "DELETE",
+                              headers: {
+                                'Content-Type': 'application/json'
+                              }
+                            })
+                          }}>Eliminar</button></td>
                       </tr>
                     );
                   }): <h3>No tiene actividades en esta seccion</h3>

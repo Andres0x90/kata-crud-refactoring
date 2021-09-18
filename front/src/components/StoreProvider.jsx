@@ -1,9 +1,9 @@
 import React, { useReducer, createContext } from 'react';
 
 const initialState = {
-  todo: { 
-      groupToDo:[], 
-      item: {} 
+  todo: {
+    groupToDo: [],
+    item: {}
   }
 };
 
@@ -32,29 +32,39 @@ function reducer(state, action) {
     case 'update-list':
       const listGroup = action.groupToDo;
       state.todo.groupToDo = action.groupToDo;
-      return {todo: {groupToDo: listGroup}}
+      return { todo: { groupToDo: listGroup } }
     case 'edit-item':
-      const todoUpEdit = state.todo;
-      todoUpEdit.item = action.item;
-      return { ...state, todo: todoUpEdit }
+      const todoEdit = state.todo.groupToDo.map(
+        (group) => {
+          if (group.id == action.groupId) {
+            group.tasks = group.tasks.map(task =>
+              task.id == action.task.id ? action.task : task
+            )
+          }
+
+          return group;
+        });
+
+      state.todo.groupToDo = todoEdit;
+      console.log(todoEdit);
+      return {...state, todo: { groupToDo: todoEdit } }
     case 'add-item-group':
       const todoGroupUp = state.todo.groupToDo;
-      todoGroupUp.push({...action.groupToDo, tasks:[]});
+      todoGroupUp.push({ ...action.groupToDo, tasks: [] });
       state.todo.groupToDo = todoGroupUp;
-      return {todo: {groupToDo: todoGroupUp}};
+      return { todo: { groupToDo: todoGroupUp } };
     case 'add-item':
       const todoUp = state.todo.groupToDo.map(
-        (group) =>
-        { 
+        (group) => {
           if (group.id == action.groupId)
-              group.tasks.push(action.item);
-              
+            group.tasks.push(action.item);
+
           return group;
         });
 
       state.todo.groupToDo = todoUp;
       console.log(todoUp);
-      return {todo: {groupToDo: todoUp} }
+      return { todo: { groupToDo: todoUp } }
     default:
       return state;
   }
@@ -62,12 +72,12 @@ function reducer(state, action) {
 
 const StoreProvider = ({ children }) => {
 
-    const [state, dispatch] = useReducer(reducer, initialState);
-  
-    return <Store.Provider value={{ state, dispatch }}>
-      {children}
-    </Store.Provider>
-  
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return <Store.Provider value={{ state, dispatch }}>
+    {children}
+  </Store.Provider>
+
 }
 
 

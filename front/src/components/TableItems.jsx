@@ -5,12 +5,12 @@ import { Store } from "./StoreProvider";
 const TableItems = () => {
   const HOST_API = "http://localhost:8080/api/to-do";
 
-  const { register, errors, handleSubmit } = useForm();
+  const { register, errors, handleSubmit, setValue } = useForm();
 
   const { dispatch, state: { todo } } = useContext(Store);
-  //const currentList = todo.list;
+  const [currentList, setCurrentList] =  useState({name: ""});
   const [groups, setGroups] = useState([]);
-  const currentList = [{}];
+
   useEffect(() => {
     fetch(HOST_API + "/groups/list")
       .then(response => response.json())
@@ -21,6 +21,7 @@ const TableItems = () => {
 
   }, [dispatch]);
 
+  setValue("nameItemUpdate",currentList.nameItemUpdate);
 
   const onDelete = (id) => {
     fetch(HOST_API + "/" + id + "/todo", {
@@ -31,7 +32,6 @@ const TableItems = () => {
   };
 
   const onEdit = (todo) => {
-    dispatch({ type: "edit-item", item: todo })
   };
 
   const onChange = (event, todo) => {
@@ -62,7 +62,7 @@ const TableItems = () => {
 
   const addTaskToGroup = (data) => {
     const request = {
-      name: data.name,
+      name: data.nameItem,
       completed: false,
       tasks:[]
     };
@@ -85,10 +85,31 @@ const TableItems = () => {
 
   }
 
+  const onUpdate = (data) => 
+  {
+    const request = {
+      name: data.nameItemUpdate,
+      id: currentList.idItemUpdate,
+    };
+    console.log(request);
+    fetch(HOST_API + "/items/update", {
+      method: "PUT",
+      body: JSON.stringify(request),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+    .then((data) =>
+    {
+      console.log(data);
+        dispatch({type: "edit-item", task: data, groupId: currentList.idItemUpdate});
+    })
+  }
+
   return <div>
 
     <form onSubmit={handleSubmit(addTaskToGroup)}>
-      <input {...register("name")} type="text" placeholder="Nombre del To-Do" />
+      <input {...register("nameItem")} type="text" placeholder="Nombre del To-Do" />
       <select {...register("groupId")}>
         <option>Seleccione una categoria</option>
         {
@@ -102,6 +123,13 @@ const TableItems = () => {
       <button type="submit">Crear tarea</button>
     </form>
 
+
+
+    <form onSubmit={handleSubmit(onUpdate)}>
+        <input type="text" {...register("nameItemUpdate")}/>
+        <button type="submit">Actualizar</button>
+    </form>
+
     {
       groups.map((group) => {
         return (
@@ -111,9 +139,11 @@ const TableItems = () => {
               <table>
                 <thead>
                   <tr>
-                    <td>ID</td>
-                    <td>Tarea</td>
-                    <td>¿Completado?</td>
+                    <th>ID</th>
+                    <th>Tarea</th>
+                    <th>¿Completado?</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,6 +154,13 @@ const TableItems = () => {
                         <td>{task.id}</td>
                         <td>{task.name}</td>
                         <td><input type="checkbox" />Completado</td>
+                        <td><button type="submit" onClick={(event) =>
+                          {
+                            event.preventDefault();
+                            setCurrentList({"nameItemUpdate": task.name, "idItemUpdate": task.id});
+                            
+                          }}>Editar</button></td>
+                        <td><button type="submit">Eliminar</button></td>
                       </tr>
                     );
                   }): <h3>No tiene actividades en esta seccion</h3>

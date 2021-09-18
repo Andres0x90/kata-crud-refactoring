@@ -1,19 +1,22 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Store } from "./StoreProvider";
 
 const TableItems = () => {
-    const HOST_API = "http://localhost:8080/api";
+    const HOST_API = "http://localhost:8080/api/to-do";
 
-    const { dispatch, state: { todo } } = useContext(Store);
-    const currentList = todo.list;
-  
+    const { dispatch, state: {todo}} = useContext(Store);
+    //const currentList = todo.list;
+    const [groups, setGroups] = useState([]);
+    const currentList = [{}];
     useEffect(() => {
-      fetch(HOST_API + "/todos")
+      fetch(HOST_API + "/groups/list")
         .then(response => response.json())
-        .then((list) => {
-          dispatch({ type: "update-list", list })
-        })
-    });
+        .then((groups) => {
+          dispatch({ type: "update-list", groupToDo: groups })
+          setGroups(todo.groupToDo);
+        });
+
+      }, [dispatch]);
   
   
     const onDelete = (id) => {
@@ -48,11 +51,23 @@ const TableItems = () => {
 
 
     };
+
   
     const decorationDone = {
       textDecoration: 'line-through'
     };
     return <div>
+
+      {
+        groups.map((group) =>
+        {
+            return (
+              <div>
+                <h3>{group.name}</h3>
+              </div>
+            );
+        })
+      }
       <table >
         <thead>
           <tr>

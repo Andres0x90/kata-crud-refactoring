@@ -1,9 +1,10 @@
-import React, { useContext, useReducer, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Store } from './StoreProvider';
 
 const Form = () => {
-    const HOST_API = "http://localhost:8080/api";
-
+    const HOST_API = "http://localhost:8080/api/to-do";
+    const {register, errors, handleSubmit} = useForm();
     const formRef = useRef(null);
     const { dispatch, state: { todo } } = useContext(Store);
     const item = todo.item;
@@ -59,9 +60,34 @@ const Form = () => {
         });
     }
 
+    const onAddGroup = (data)=>
+    {
+   
+      const request = {
+        name: data.name,
+      };
   
-    return <form ref={formRef}>
-      <input
+      fetch(HOST_API + "/groups/save", {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then((groupItem) => {
+          dispatch({ type: "add-item-group", groupToDo: groupItem });
+          //setState({ name: "" });
+
+        });       
+    }
+
+  
+    return <form onSubmit={handleSubmit(onAddGroup)}>
+      <input type="text" placeholder="Crear nueva seccion" {...register("name")} />
+      <button type="submit">Crear grupo</button>
+
+      {/* <input
         type="text"
         name="name"
         placeholder="¿Qué piensas hacer hoy?"
@@ -70,7 +96,7 @@ const Form = () => {
           setState({ ...state, name: event.target.value })
         }}  ></input>
       {item.id && <button onClick={onEdit}>Actualizar</button>}
-      {!item.id && <button onClick={onAdd}>Crear</button>}
+      {!item.id && <button onClick={onAdd}>Crear</button>} */}
     </form>
 }
 

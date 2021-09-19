@@ -6,7 +6,7 @@ import TableItems from "./components/TableItems";
 function App() {
   return <StoreProvider>
     <div className="container-fluid">
-      <h3>To-Do List</h3>
+      <h3>Gestor de tareas - Sofka U</h3>
       <Form />
       <TableItems />
     </div>
